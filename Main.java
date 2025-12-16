@@ -1,55 +1,62 @@
+import java.util.*;
+
 public class Main {
-    int eau = 100;
-    int grains = 50;
-    int goblets = 10;
-    int usure = 0;
-    double monnayeur = 0;
-    double caisse = 0;
-    Map<String, Recettes> recettes = Map.of(
-            "Café Court (Espresso)", new Recettes(1.5, 10, 10, 1),
-            "Café Long (Allongé) ", new Recettes(2, 20, 10, 1)
-        );
-    };
+    public static void main(String[] arg) {
+        Scanner scanner = new Scanner(System.in);
+        Machine machine1 = new Machine();
+        while (true) {
+            if (machine1.VerifUsure()) {
+                System.out.println("ERREUR : Machine entartrée - Appelez le technicien");
+                break;
+            }
+            System.out.println("-------------------------------------------------");
+            System.out.println("ETAT : EAU: " + machine1.eau + "cl | GRAINS: " + machine1.grains + "g | GOBELETS: " + machine1.goblets);
+            System.out.println("CREDIT : " + machine1.monnayeur + " €");
+            System.out.println("-------------------------------------------------");
+            System.out.println("1. Insérer une pièce (Simuler +0.50€)");
+            System.out.println("2. Commander un Espresso (1.50€)");
+            System.out.println("3. Commander un Allongé (2.00€)");
+            System.out.println("4. MENU TECHNICIEN (Maintenance)");
+            System.out.println("5. Quitter");
+            
+            String input = scanner.nextLine();
 
-    public boolean VerifUsure() {
-        if (usure >= 5) {
-            System.out.println("ERREUR : Machine entartrée - Appelez le technicien");
-            return false;
-        }
-        return true;
-    }
+            if (input.equals("1")) {
+                machine1.monnayeur += 0.5;
+            }
+            else if (input.equals("2")) {
+                machine1.ExecCommande("Café Court (Espresso)");
+            }
+            else if (input.equals("3")) {
+                machine1.ExecCommande("Café Long (Allongé)");
+            }
+            else if (input.equals("4")) {
+                while (true) {
+                    System.out.println("1. Recharger");
+                    System.out.println("2. Détartrer");
+                    System.out.println("3. Récupérer l'argent");
+                    input = scanner.nextLine();
 
-    public boolean VerifCredit(String choix) {
-        if (monnayeur < recettes.get(choix).prix) {
-            System.out.println("Crédit insuffisant, ajoutez de la monnaie")
-            return false;
+                    if (input.equals("1")) {
+                        machine1.eau = 100;
+                        machine1.grains = 50;
+                        machine1.goblets = 10;
+                        break;
+                    }
+                    else if (input.equals("2")) {
+                        machine1.usure = 0;
+                        break;
+                    }
+                    else if (input.equals("3")) {
+                        System.out.println(machine1.caisse);
+                        machine1.caisse = 0;
+                        break;
+                    }
+                }
+            }
+            else if (input.equals("5")) {
+                break;
+            }
         }
-        return true;
-    }
-
-    public boolean VerifStocks(choix) {
-        if (eau < recettes.get(choix).eau) {
-            System.out.println("Plus d'eau !")
-            return false;
-        }
-        if (grains < recettes.get(choix).grains) {
-            System.out.println("Plus de grains !")
-            return false;
-        }
-        if (goblets < recettes.get(choix).goblets) {
-            System.out.println("Plus de gobelets !")
-            return false;
-        }
-        return true;
-    }
-
-    public void ExecCommande(choix) {
-        eau -= recettes.get(choix).eau;
-        grains -= recettes.get(choix).grains;
-        gobelets -= recettes.get(choix).gobelets;
-        caisse += monnayeur
-        monnayeur = 0
-        usure += 1
-        System.out.println("Votre café est prêt !")
     }
 }
